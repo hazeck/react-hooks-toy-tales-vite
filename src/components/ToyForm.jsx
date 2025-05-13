@@ -1,33 +1,54 @@
-import React from "react";
+import React, { useState } from 'react';
 
-function ToyForm() {
+const ToyForm = () => {
+  const [name, setName] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [toys, setToys] = useState([]); // State for managing the list of toys
+
+  const handleNameChange = (e) => setName(e.target.value);
+  const handleImageUrlChange = (e) => setImageUrl(e.target.value);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!name || !imageUrl) return; // Don't submit if the fields are empty
+
+    // Create a new toy object
+    const newToy = { name, imageUrl };
+
+    // Update the toys list
+    setToys([...toys, newToy]);
+
+    // Reset the form fields
+    setName('');
+    setImageUrl('');
+  };
+
   return (
-    <div className="container">
-      <form className="add-toy-form">
-        <h3>Create a toy!</h3>
+    <div>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
-          name="name"
           placeholder="Enter a toy's name..."
-          className="input-text"
+          value={name}
+          onChange={handleNameChange}
         />
-        <br />
         <input
           type="text"
-          name="image"
           placeholder="Enter a toy's image URL..."
-          className="input-text"
+          value={imageUrl}
+          onChange={handleImageUrlChange}
         />
-        <br />
-        <input
-          type="submit"
-          name="submit"
-          value="Create New Toy"
-          className="submit"
-        />
+        <button type="submit">Create New Toy</button>
       </form>
+
+      <h2>Toy List</h2>
+      <ul>
+        {toys.map((toy, index) => (
+          <li key={index}>{toy.name}</li> // Displaying the toy name
+        ))}
+      </ul>
     </div>
   );
-}
+};
 
 export default ToyForm;
